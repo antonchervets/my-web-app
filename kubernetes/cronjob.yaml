@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: my-web-app-periodic-worker
+spec:
+  schedule: "*/30 * * * *" 
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: periodic-task
+            image: antonchervets/helloworld1.0.0 
+            command: ["python", "scripts/daily_cleanup.py"] 
+            envFrom:
+            - configMapRef:
+                name: configmap
+            - secretRef:
+                name: secrets
+          restartPolicy: OnFailure 
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
