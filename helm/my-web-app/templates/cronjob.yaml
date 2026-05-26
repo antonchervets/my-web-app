@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-periodic-worker
+spec:
+  schedule: {{ .Values.cronjob.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: periodic-task
+            image: {{ .Values.image.repository }}
+            command: ["python", "scripts/daily_cleanup.py"] 
+            envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-configmap
+            - secretRef:
+                name: {{ .Release.Name }}-secrets
+          restartPolicy: OnFailure 
+  successfulJobsHistoryLimit: {{ .Values.cronjob.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.cronjob.failedJobsHistoryLimit }}

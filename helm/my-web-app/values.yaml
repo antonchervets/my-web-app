@@ -1,0 +1,37 @@
+# main
+replicaCount: 2
+image:
+  repository: antonchervets/helloworld1.0.0
+  pullPolicy: IfNotPresent
+
+# configmap
+config:
+  env: "development"
+  dbHost: "postgres-service"
+  logLevel: "debug"
+
+# secrets
+secrets:
+  dbPassword: "super-secret-password"
+  apiKey: "12345-abcde"
+
+# deployment
+resources:
+  requests:
+    cpu: "50m"
+  limits:
+    cpu: "500m"
+
+# hpa
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
+
+# cronjob
+cronjob:
+  schedule: "*/30 * * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+
