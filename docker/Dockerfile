@@ -6,7 +6,7 @@ RUN pip install --no-cache-dir flask
 
 COPY helloworld.py .
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD ["python", "helloworld.py"]
 
